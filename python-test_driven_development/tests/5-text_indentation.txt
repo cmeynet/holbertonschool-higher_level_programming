@@ -37,14 +37,14 @@ Handles text with no punctuation:
     >>> text_indentation("Just a line without punctuation")
     Just a line without punctuation
 
-If the text is not a string:
+Raises TypeError when text is not a string:
     >>> text_indentation(123)
     Traceback (most recent call last):
         ...
     TypeError: text must be a string
 
 If the function has no arguments:
-    >>> text_indentation(123)
+    >>> text_indentation()
     Traceback (most recent call last):
         ...
     TypeError: text_indentation() missing 1 required positional argument: 'text'
