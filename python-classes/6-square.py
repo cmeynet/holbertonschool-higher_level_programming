@@ -63,12 +63,13 @@ class Square:
         return self.__size * self.__size
 
     def my_print(self):
-        """ Prints the square with the character # """
+        """ Prints the square with the character # at position"""
         if self.__size == 0:
             print()
-        else:
-            if self.__position[1] > 0:
-                print()
-            for i in range(self.__size):
-                print(" " * self.__position[0], end="")
-                print("#" * self.__size)
+            return
+        # Adds empty lines
+        for _ in range(self.__position[1]):
+            print()
+        # Print square with horizontal spaces
+        for _ in range(self.__size):
+            print(" " * self.__position[0] + "#" * self.__size)
