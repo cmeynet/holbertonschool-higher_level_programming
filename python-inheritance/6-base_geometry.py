@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-This is the "5-base_geometry" modulo.
+This is the "6-base_geometry" modulo.
 Its contains the class:
 BaseGeometry
 """

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-This is the "5-base_geometry" modulo.
+This is the "7-base_geometry" modulo.
 Its contains the class:
 BaseGeometry
 """
@@ -12,12 +12,13 @@ class BaseGeometry:
 
     Methods:
         area: calculate the area
+        integer_validator: validate value
     """
     def area(self):
         raise Exception("area() is not implemented")
 
     def integer_validator(self, name, value):
-        if not isinstance(value, int):
+        if type(value) is not int:
             raise TypeError("{} must be an integer".format(name))
         if value <= 0:
             raise ValueError("{} must be greater than 0".format(name))
