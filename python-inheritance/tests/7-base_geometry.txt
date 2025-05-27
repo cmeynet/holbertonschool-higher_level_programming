@@ -6,6 +6,11 @@ Using « BaseGeometry »
 import module:
     >>> BaseGeometry = __import__('7-base_geometry').BaseGeometry
 
+Value is an integer:
+    >>> bg = BaseGeometry()
+    >>> bg.integer_validator("width", 5)
+
+
 If value is a not an integer:
     >>> bg = BaseGeometry()
     >>> bg.integer_validator("name", "John")
@@ -26,3 +31,17 @@ If value is 0:
     Traceback (most recent call last):
         ...
     ValueError: age must be greater than 0
+
+If value is a float:
+    >>> bg = BaseGeometry()
+    >>> bg.integer_validator("width", 5.0)
+    Traceback (most recent call last):
+        ...
+    TypeError: width must be an integer
+
+If value is a boolean:
+    >>> bg = BaseGeometry()
+    >>> bg.integer_validator("flag", True)
+    Traceback (most recent call last):
+        ...
+    TypeError: flag must be an integer
