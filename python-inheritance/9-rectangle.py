@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-This is the "8-rectangle" modulo.
+This is the "9-rectangle" modulo.
 Its contains the class:
 BaseGeometry
 Rectangle
@@ -32,9 +32,18 @@ class Rectangle(BaseGeometry):
     Attributs:
         width: width of the rectangle
         height: height of the rectangle
+
+    Methods:
+        area: calculate area of the rectangle
     """
     def __init__(self, width, height):
         self.integer_validator("width", width)
         self.integer_validator("height", height)
         self.__width = width
         self.__height = height
+
+    def area(self):
+        return self.__width * self.__height
+
+    def __str__(self):
+        return "[Rectangle] {} / {}".format(self.__width, self.__height)
