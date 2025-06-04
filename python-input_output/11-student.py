@@ -20,5 +20,5 @@ class Student:
         """ Replaces all attributes of the Student instance """
         # Iterate through each key-value pair in the json dictionary
         for key, value in json.items():
-            # Assigns to the self object an attribute named key with the value value
+            # Assigns to the self object an attribute named key and value
             setattr(self, key, value)
