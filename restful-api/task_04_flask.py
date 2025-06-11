@@ -42,7 +42,8 @@ def status():
 def get_users(username):
     user = users.get(username)
     if user:
-        return jsonify(user)
+        # Use **name_dict to combine dictionaries
+        return jsonify({"username": username, **user})
     else:
         return jsonify({"error": "User not found"}), 404
 
