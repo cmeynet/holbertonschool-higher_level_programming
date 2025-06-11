@@ -33,10 +33,10 @@ def fetch_and_save_posts():
             }
             structured_data.append(entry)
 
-    with open("posts.csv", "w") as file:
-        """ Create a DictWriter object to write dictionaries to the CSV file,
-        specifying the columns to write."""
-        writer = csv.DictWriter(file, fieldnames=["id", "title", "body"])
-        writer.writeheader()  # Writes the first line of the CSV file
-        # Writes all lines of data to the file, from the structured_data list.
-        writer.writerows(structured_data)
+        with open("posts.csv", "w") as file:
+            """ Create a DictWriter object to write dictionaries to the CSV file,
+            specifying the columns to write."""
+            writer = csv.DictWriter(file, fieldnames=["id", "title", "body"])
+            writer.writeheader()  # Writes the first line of the CSV file
+            # Writes all lines of data to the file, from the structured_data list.
+            writer.writerows(structured_data)
