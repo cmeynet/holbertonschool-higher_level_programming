@@ -60,8 +60,6 @@ def add_user():
 
     # Extract username from JSON request
     username = data["username"]
-    """if username in users:
-        return jsonify({"error": "User already exists"}), 409"""
     # Add user
     users[username] = {
         "name": data["name"],
