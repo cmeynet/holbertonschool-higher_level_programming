@@ -54,7 +54,7 @@ def add_user():
 
     # Checks if the necessary data is present
     required_fields = {"username", "name", "age", "city"}
-    if not data or not required_fields.issubset(data):
+    if not data or "username" not in data:
         return jsonify({"error": "Username is required"}), 400
 
     # Extract username from JSON request
