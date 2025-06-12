@@ -1,0 +1,101 @@
+#!/usr/bin/python3
+"""
+Application Flask de démonstration avec authentification sécurisée.
+
+Ce script met en œuvre deux types d'authentification :
+1. L'authentification HTTP basique pour accéder à une route protégée.
+2. L'authentification basée sur JWT (JSON Web Token)
+pour sécuriser l'accès aux API.
+
+Fonctionnalités principales :
+- Vérification des identifiants utilisateurs avec mots de passe hachés.
+- Route `/login` : génère un token JWT si les identifiants sont valides.
+- Route `/basic-protected` : protégée par authentification HTTP basique.
+- Route `/jwt-protected` : accessible uniquement avec un token JWT valide.
+- Route `/admin-only` : accessible uniquement
+par les utilisateurs ayant le rôle "admin".
+"""
+from flask import Flask, request, jsonify
+from flask_httpauth import HTTPBasicAuth
+from flask_jwt_extended import (
+    JWTManager, create_access_token, jwt_required,
+    get_jwt_identity, get_jwt
+)
+from werkzeug.security import generate_password_hash, check_password_hash
+
+app = Flask(__name__)
+auth = HTTPBasicAuth()
+
+# Clé secrète pour signer les tokens
+app.config["JWT_SECRET_KEY"] = "super-secret-key"
+
+# Initialisation de JWT
+jwt = JWTManager(app)
+
+# Liste des utilisateurs avec mot de passe haché et rôle
+users = {
+    "user1": {
+        "username": "user1",
+        "password": generate_password_hash("password"),
+        "role": "user"
+        },
+    "admin1": {
+        "username": "admin1",
+        "password": generate_password_hash("password"),
+        "role": "admin"
+        }
+}
+
+
+# Vérification des identifiants
+@auth.verify_password
+def verify_password(username, password):
+    user = users.get(username)
+    if user and check_password_hash(user["password"], password):
+        return username
+
+
+# Route protégée par authentification basique
+@app.route("/basic-protected", methods=['GET'])
+@auth.login_required
+def basic_protected():
+    return "Basic Auth: Access Granted"
+
+
+# Créer une route /login pour générer le token JWT
+@app.route("/login", methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+# Vérifie que l'utilisateur existe
+    user = users.get(username)
+
+# Créer un token
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token), 200
+
+
+# Protéger une route avec JWT
+@app.route("/jwt-protected", methods=['GET'])
+@jwt_required()
+def jwt_protected():
+    return "JWT Auth: Access Granted"
+
+
+# Route protégée basée sur les rôles
+@app.route("/admin-only", methods=['GET'])
+@jwt_required()
+def admin_only():
+    current_user = get_jwt_identity()  # pour retrouver son nom d’utilisateur
+    user_data = users.get(current_user)  # regarde le rôle associé
+
+    if not user_data or user_data.get("role") != "admin":
+        return jsonify({"error": "Admin access required"}), 403
+
+    return "Admin Access: Granted", 200
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
