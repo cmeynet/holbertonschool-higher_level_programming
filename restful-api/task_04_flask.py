@@ -53,8 +53,6 @@ def add_user():
     # Retrieves the JSON data from the request
     data = request.get_json()
 
-    # Checks if the necessary data is present
-    required_fields = {"username", "name", "age", "city"}
     if not data or "username" not in data:
         return jsonify({"error": "Username is required"}), 400
 
