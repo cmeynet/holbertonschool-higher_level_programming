@@ -51,9 +51,10 @@ users = {
 @auth.verify_password
 def verify_password(username, password):
     user = users.get(username)
-    if user and check_password_hash(user["password"], password):
+    if user and check_password_hash(user.get("password"), password):
         return username
-    return None
+    else:
+        return None
 
 
 # Route protégée par authentification basique
@@ -70,14 +71,11 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
-# Vérifie que l'utilisateur existe
-    user = users.get(username)
-
 # Créer un token
     access_token = create_access_token(
         identity=username,
         additional_claims={"role": users[username]["role"]})
-    return jsonify(access_token=access_token), 200
+    return jsonify(access_token=access_token)
 
 
 # Protéger une route avec JWT
@@ -96,7 +94,8 @@ def admin_only():
 
     if not user_data or user_data.get("role") != "admin":
         return jsonify({"error": "Admin access required"}), 403
-    return "Admin Access: Granted", 200
+    else:
+        return "Admin Access: Granted"
 
 
 @jwt.unauthorized_loader
