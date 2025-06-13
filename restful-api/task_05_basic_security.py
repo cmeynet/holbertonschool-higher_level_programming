@@ -50,8 +50,8 @@ users = {
 # Vérification des identifiants
 @auth.verify_password
 def verify_password(username, password):
-    user = users.get(username)
-    if user and check_password_hash(user.get("password"), password):
+    if username in users and check_password_hash(
+       users.get(username).get("password"), password):
         return username
     else:
         return None
@@ -67,15 +67,17 @@ def basic_protected():
 # Créer une route /login pour générer le token JWT
 @app.route("/login", methods=['POST'])
 def login():
-    data = request.get_json()
-    username = data.get("username")
-    password = data.get("password")
+    username = request.json.get("username")
+    password = request.json.get("password")
+    log = verify_password(username, password)
 
-# Créer un token
-    access_token = create_access_token(
-        identity=username,
-        additional_claims={"role": users[username]["role"]})
-    return jsonify(access_token=access_token)
+    if log is None:
+        return jsonify({"error": "invalid credentials"}), 401
+    else:
+        access_token = create_access_token(
+            identity=username,
+            additional_claims={"role": users[username]["role"]})
+        return jsonify(access_token=access_token)
 
 
 # Protéger une route avec JWT
