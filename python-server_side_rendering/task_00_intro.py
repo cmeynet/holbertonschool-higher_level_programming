@@ -7,13 +7,17 @@ import os
 
 def generate_invitations(template, attendees):
     if not isinstance(template, str):
-        raise TypeError("Template must be a string")
+        print("Invalid input: template must be a string")
+        return
     if not isinstance(attendees, list) or not all(isinstance(item, dict) for item in attendees):
-        raise TypeError("Attendees must be a list of dictionnaries")
+        print("Invalid input: attendees must be a list of dictionnaries")
+        return
     if not template.strip():
-        raise ValueError("Template is empty, no output files generated.")
+        print("Template is empty, no output files generated.")
+        return
     if not attendees:
-        raise ValueError("No data provided, no output files generated.")
+        print("No data provided, no output files generated.")
+        return
 
     # Fields required
     placeholders = ["name", "event_title", "event_date", "event_location"]
