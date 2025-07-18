@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Product</title>
+</head>
+<body>
+  {% include 'header.html' %}
+  {% if error %}
+  <p>{{error}}</p>
+  {% else %}
+  <table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in products %}
+        <tr>
+            <td>{{p.name}}</td>
+            <td>{{p.category}}</td>
+            <td>{{p.price}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% include 'footer.html' %}
+</body>
+</html>
