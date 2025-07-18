@@ -32,36 +32,32 @@ def product_display():
     source = request.args.get("source")
     product_id = request.args.get("id")
 
-    try:
-        if source == "json":
+    if source not in ['json', 'csv']:
+        return render_template('product_display.html', error='Wrong source')
+    
+    if source == "json":
+        try:
             with open("products.json", "r") as f:
                 products = json.load(f)
+        except FileNotFoundError:
+            return render_template('product_display.html', error='Not file found')
 
-        elif source == "csv":
+    elif source == "csv":
+        try:
             with open("products.csv", newline='') as f:
                 reader = csv.DictReader(f)
-
-                # Convert CSV rows to dicts with correct types
-                products = []
-                for row in reader:
-                    products.append({
-                        "id": row["id"],
-                        "name": row["name"],
-                        "category": row["category"],
-                        "price": row["price"]
-                    })
-        else:
-            return render_template('product_display.html', error="Wrong source", products=[])
+                products = list(reader)
+        except FileNotFoundError:
+            return render_template('product_display.html', error='Not file found')
     
-    except Exception as e:
-        return render_template('product_display.html', error="File not found.", products=[])
+    else:
+        return render_template('product_display.html', error="Wrong source")
     
     # Filter by ID if provided
     if product_id:
-        filtered = [p for p in products if str(p.get('id')) == product_id]
-        if not filtered:
-            return render_template('product_display.html', error='Product not found.', products=[])
-        products = filtered
+        products = [p for p in products if str(p.get('id')) == product_id]
+        if not products:
+            return render_template('product_display.html', error='Product not found.')
 
     return render_template('product_display.html', products=products)
 
