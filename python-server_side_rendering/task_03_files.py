@@ -27,8 +27,8 @@ def items():
         items_list = []
     return render_template('items.html', items=items_list)
 
-@app.route('/product_display')
-def product_display():
+@app.route('/products')
+def products():
     source = request.args.get("source")
     product_id = request.args.get("id")
 
@@ -40,7 +40,7 @@ def product_display():
             with open("products.json", "r") as f:
                 products = json.load(f)
         except FileNotFoundError:
-            return render_template('product_display.html', error='Not file found')
+            return render_template('product_display.html', error='File not found')
 
     elif source == "csv":
         try:
@@ -48,7 +48,7 @@ def product_display():
                 reader = csv.DictReader(f)
                 products = list(reader)
         except FileNotFoundError:
-            return render_template('product_display.html', error='Not file found')
+            return render_template('product_display.html', error='File not found')
     
     else:
         return render_template('product_display.html', error="Wrong source")
