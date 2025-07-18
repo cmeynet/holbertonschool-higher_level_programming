@@ -36,19 +36,32 @@ def product_display():
         if source == "json":
             with open("products.json", "r") as f:
                 products = json.load(f)
+
         elif source == "csv":
             with open("products.csv", newline='') as f:
                 reader = csv.DictReader(f)
-                products = list(reader)
+
+                # Convert CSV rows to dicts with correct types
+                products = []
+                for row in reader:
+                    products.append({
+                        "id": row["id"],
+                        "name": row["name"],
+                        "category": row["category"],
+                        "price": row["price"]
+                    })
         else:
-            return render_template('product_display.html', error="Wrong source")
-    except Exception as e:
-        return render_template('product_display.html', error="File not found.")
+            return render_template('product_display.html', error="Wrong source", products=[])
     
+    except Exception as e:
+        return render_template('product_display.html', error="File not found.", products=[])
+    
+    # Filter by ID if provided
     if product_id:
-        products = [p for p in products if str(p.get('id')) == product_id]
-        if not products:
-            return render_template('product_display.html', error='Product not found.')
+        filtered = [p for p in products if str(p.get('id')) == product_id]
+        if not filtered:
+            return render_template('product_display.html', error='Product not found.', products=[])
+        products = filtered
 
     return render_template('product_display.html', products=products)
 
